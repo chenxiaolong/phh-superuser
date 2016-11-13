@@ -30,12 +30,11 @@ $MODDIR/bin/sepolicy-inject --live
 
 # Expose the root path
 log_print "Mounting supath"
-rm -rf /magisk/.core/bin $MODDIR/sbin_bind
-mkdir -p $MODDIR/sbin_bind 
-/data/busybox/cp -afc /sbin/. $MODDIR/sbin_bind
-chmod 755 $MODDIR/sbin_bind
-ln -s $MODDIR/bin/* $MODDIR/sbin_bind
-mount -o bind $MODDIR/sbin_bind /sbin
+/data/busybox/mount -o remount,rw /
+rm -rf /magisk/.core/bin
+ln -s "$MODDIR"/bin/* /sbin/
+chmod 751 /sbin
+/data/busybox/mount -o remount,ro /
 
 # Run su.d
 for script in $MODDIR/su.d/* ; do
